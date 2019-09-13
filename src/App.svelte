@@ -25,20 +25,24 @@
 		background-color: yellowgreen;
 	}
 	.item { 
-		padding:10px;
+		padding: 16px 12px;
 		border:none;
 		background-color: transparent;
 		flex-basis:100%;
 		/* pointer-events: none; */
 	}
-	.editmode { 
-		outline : 2px solid blue;
-	}
 	.quantity {
-		width: 20vw;
+		display:flex;
+		flex-direction: column;
+		width: 30vw;
 		/* height:100%; */
 		padding:5px;
 		background-color: yellowgreen;
+		justify-content:center;
+		align-items:center;
+	}
+	.unit { 
+		font-size: 10px;
 	}
 </style>
 <script>
@@ -53,21 +57,26 @@
 	import Keypad from './keypad.svelte';
 	import EditItem from './edit-item.svelte';
 
-	let items = data.map(name => ({id:'A'+shortid.generate(),name, qty: ''}));
+	let items = data.map(name => ({id:'A'+shortid.generate(),name, qty: '', unit:''}));
 	let keypadVisible = false;
 	let autoscroll = false;
 	let pointerDown = false;
-	export let editMode = false;
 
 	console.table(items)
 
 	const findItemById = id => items.find(item => item.id === id) 
 
-	function select(e) {
+	function handleQtyClick(e) {
+		selectedItem = findItemById(e.currentTarget.parentNode.id);
+		keypadVisible = true;
+	}
+
+	function handleItemClick(e) {
+		keypadVisible=false;
+		const el = e.target;
+		console.log(selectedItem, el.id)
 		// keypadVisible = !keypadVisible;
-		console.log(selectedItem.id,e.currentTarget.id )
-						const el = document.getElementById(selectedItem.id).firstChild;
-		if (selectedItem.id !== e.currentTarget.id) {
+		if (selectedItem.id !== el.parentNode.id) {
 			el.readOnly = true;
 		}
 		else {
@@ -76,13 +85,10 @@
 			el.select();
 		}
 			
-		selectedItem = findItemById(e.currentTarget.id);
+		selectedItem = findItemById(el.parentNode.id);
+
 
 		return;
-		if (editMode && selectedItem.id !== e.currentTarget.id) {
-			editMode = false;
-			return;
-		}
 		selectedItem = findItemById(e.currentTarget.id);
 		if (!keypadVisible) 
 			keypadVisible = true;
@@ -92,26 +98,54 @@
 
 	function handleKeypadClick(e) {
 		const key = e.target.innerText;
-		let qty = parseInt(`${selectedItem.qty}${key}`);
-		if (key === 'X') {
-			editMode = true;
-			const el = document.getElementById(selectedItem.id).firstChild;
-			el.readOnly = false;
-			el.focus();
-			console.log(el);
+		const type = e.target.dataset.type;
+		if (type==='popup')
+			return;
+		if (type === 'unit') {
+			selectedItem.unit = key;
+			items = [...items];
 			return;
 		}
-		if (key === '+')
-			qty++;
-		if (key === '-') {
-			if (qty < 2)
-				qty = 0;
-			else
-				qty--;
+		if (['1/4', '1/2', '3/4'].includes(key)) {
+			selectedItem.qty = key;
+			items = [...items];
+			return;
+		}
+		if (key === 'X') {
+			selectedItem.qty = '';
+			selectedItem.unit = '';
+			items = [...items];
+			return;
+		}
+
+		let qty = Number(selectedItem.qty);
+		if (isNaN(qty))
+			return;
+		switch (key) {
+			case '+': {
+				qty++;
+				break;
+			}
+			case '-': {
+				if (qty < 2)
+					qty = 0;
+				else
+					qty--;
+				break;
+			}
+			default: 
+				if ('0123456789'.includes(key)) 
+					qty = Number(`${qty}${key}`);
 		}
 		selectedItem.qty =  qty;
 		items = [...items]
 	}
+
+	function handleUnitChange(e) {
+		selectedItem.unit =  e.target.value;
+		items = [...items]
+	}
+
 	function handleScroll() {
 		if (!autoscroll && pointerDown) {
 			console.log('autoffsdds')
@@ -137,40 +171,31 @@
 		}
 
 	}
-
-	function handleContextMenu(e) {
-		selectedItem = findItemById(e.target.parentNode.id);
-		editMode = true;
-		console.log(e.target,selectedItem, editMode);
-			const el = document.getElementById(selectedItem.id).firstChild;
-			el.readOnly = false;
-		e.target.focus();
-	}
-
 </script>
-{#if editMode}
-	<!-- <EditItem value={selectedItem.name}/> -->
-{/if}
 <div id='container' class='container' class:autoscroll 
 	on:scroll={handleScroll} 
 	on:pointerdown={() => pointerDown = true}
 	on:pointerup={() => pointerDown = false}	
 >
 	{#each items as item, index}
-	<div id={item.id} data-name={item.name} 
-		class='row' 
-		class:editmode={editMode && selectedItem.id === item.id}
-		class:selected={selectedItem.id === item.id} 
-		on:click={select}
-		on:contextmenu|preventDefault={handleContextMenu}
-	>
-			<input type=text readonly class='item' value={item.name}
-				on:blur={() => editMode = false}
-			/>
-		<!-- <div {editMode} tabindex='0' type=text class='item' value={item.name} on:blur={() => editMode = true}>{item.name} </div> -->
-		<div tabindex='0' class='quantity'>{item.qty}</div>
-	</div>
+		<div id={item.id} data-name={item.name} 
+			class='row' 
+			class:selected={selectedItem.id === item.id} 
+		>
+			<input type=text readonly class='item' value={item.name} on:click={handleItemClick}/>
+			<div class='quantity'  on:click={handleQtyClick} >
+				<div tabindex='0'>{item.qty}</div>
+				<!-- <input type=number tabindex='0' class='quantity' on:click={handleQtyClick} value={item.qty}/> -->
+				<div class='unit'>{item.unit}</div>
+				
+			</div>
+		</div>
 	{/each}
 	<div id='spacer'></div>
 </div>
-<Keypad visible={keypadVisible} on:click={handleKeypadClick} on:open={handleKeypadOpen}/>
+<Keypad 
+	visible={keypadVisible} 
+	on:click={handleKeypadClick} 
+	on:open={handleKeypadOpen}
+	on:change={handleUnitChange}
+/>

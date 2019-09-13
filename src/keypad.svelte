@@ -1,6 +1,6 @@
 <style>
     .container { 
-        background-color: #f003;
+        background-color: #000;
         position:absolute;
         bottom:0;
         display: flex;
@@ -18,12 +18,50 @@
         flex-direction: row;
         flex:1;
     }
+    .unit {
+        position: relative;
+        display:flex;
+        align-items: center;
+        justify-content: center;
+        /* background: red; */
+        /* flex-shrink:1; */
+        height:7vh;
+        width:100vw;
+        color:white;
+    }
+    .popup { 
+        position:absolute;
+        top: 7vh;
+        display:flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: flex-start;
+        flex-wrap: wrap;
+        width:100vw;
+        color:white;
+        background: #000;
+        height:calc(50vh - 7vh);
+    }
+    .unitbutton {
+        border:none;
+        outline:none;
+        background: transparent;
+        /* background: blue; */
+        color:#aaa;
+        width:50vw;
+        height: 10vh;
+        flex-shrink:0;
+        font-size: 3vh;
+
+    }
 </style>
 <script>
     export let visible = true;
+    import {slide} from 'svelte/transition';
     import Key from './key.svelte';
     import { createEventDispatcher } from 'svelte';
     let container;
+    let showPopup = false;
 
     const dispatch = createEventDispatcher();
     function handleTransitionEnd() {
@@ -34,6 +72,18 @@
     }
 </script>
 <div bind:this={container} class='container' class:hidden={!visible} on:click on:transitionend={handleTransitionEnd}>
+    <div class='unit' data-type='popup' on:click={() => showPopup = !showPopup}>Choose unit ...
+    {#if showPopup}
+        <div class='popup' transition:slide>
+            <button class='unitbutton' data-type='unit'>bags</button>
+            <button class='unitbutton' data-type='unit'>black tubs</button>
+            <button class='unitbutton' data-type='unit'>boxes</button>
+            <button class='unitbutton' data-type='unit'>trays</button>
+            <button class='unitbutton' data-type='unit'>bin</button>
+            <button class='unitbutton' data-type='unit'>shelf</button>
+        </div>
+    {/if}
+    </div>
     <div class='row'>
         <Key>1</Key>
         <Key>2</Key>
