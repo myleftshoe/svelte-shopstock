@@ -1,11 +1,11 @@
 {
   "name": "ShopStock",
   "short_name": "ShopStock",
-  "theme_color": "#2196f3",
-  "background_color": "#2196f3",
+  "theme_color": "#232323",
+  "background_color": "#232323",
   "display": "standalone",
   "scope": "/",
-  "start_url": "/",
+  "start_url": "/index.html",
   "icons": [
     {
       "src": "images/icons/icon-512x512.png",
