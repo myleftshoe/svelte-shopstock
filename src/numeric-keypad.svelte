@@ -2,30 +2,29 @@
 <script>
     import KeyRow from './keyrow.svelte';
     import Key from './key.svelte';
+    const type = 'numeric'
 </script>
-<div data-type='numeric'>
-    <KeyRow>
-        <Key>1</Key>
-        <Key>2</Key>
-        <Key>3</Key>
-        <Key>1/4</Key>
-    </KeyRow>
-    <KeyRow>
-        <Key>4</Key>
-        <Key>5</Key>
-        <Key>6</Key>
-        <Key>1/2</Key>
-    </KeyRow>
-    <KeyRow>
-        <Key>7</Key>
-        <Key>8</Key>
-        <Key>9</Key>
-        <Key>3/4</Key>
-    </KeyRow>
-    <KeyRow>
-        <Key>+</Key>
-        <Key>0</Key>
-        <Key>-</Key>
-        <Key>X</Key>
-    </KeyRow>
-</div>
+<KeyRow>
+    <Key {type}>1</Key>
+    <Key {type}>2</Key>
+    <Key {type}>3</Key>
+    <Key {type}>1/4</Key>
+</KeyRow>
+<KeyRow>
+    <Key {type}>4</Key>
+    <Key {type}>5</Key>
+    <Key {type}>6</Key>
+    <Key {type}>1/2</Key>
+</KeyRow>
+<KeyRow>
+    <Key {type}>7</Key>
+    <Key {type}>8</Key>
+    <Key {type}>9</Key>
+    <Key {type}>3/4</Key>
+</KeyRow>
+<KeyRow>
+    <Key {type}>+</Key>
+    <Key {type}>0</Key>
+    <Key {type}>-</Key>
+    <Key {type}>X</Key>
+</KeyRow>

@@ -13,6 +13,9 @@
         background-color: #777;
     }
 </style>
-<button on:click>
+<script>
+    export let type;
+</script>
+<button on:click data-type={type}>
     <slot/>
 </button>

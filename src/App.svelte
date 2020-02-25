@@ -98,7 +98,8 @@
 
 	function handleKeypadClick(e) {
 		const key = e.target.innerText;
-		const type = e.target.parentElement.parentElement.dataset.type;
+		const type = e.target.dataset.type;
+		console.log(type, key)
 		if (type==='popup')
 			return;
 		if (type === 'unit') {

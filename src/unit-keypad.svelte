@@ -1,17 +1,16 @@
 <script>
     import KeyRow from './keyrow.svelte';
     import Key from './key.svelte';
+    const type = 'unit';
 </script>
-<div data-type='unit'>
-    <KeyRow>
-        <Key>black tubs</Key>
-        <Key>boxes</Key>
-    </KeyRow>
-    <KeyRow>
-        <Key>trays</Key>
-        <Key>bin</Key>
-    </KeyRow>
-    <KeyRow>
-        <Key>shelf</Key>
-    </KeyRow>
-</div>
+<KeyRow>
+    <Key {type}>black tubs</Key>
+    <Key {type}>boxes</Key>
+</KeyRow>
+<KeyRow>
+    <Key {type}>trays</Key>
+    <Key {type}>bin</Key>
+</KeyRow>
+<KeyRow>
+    <Key {type}>shelf</Key>
+</KeyRow>
