@@ -30,7 +30,7 @@
     import NumericKeypad from './numeric-keypad.svelte';
     import UnitKeypad from './unit-keypad.svelte';
     import { createEventDispatcher } from 'svelte';
-    export let numeric = true;
+    export let type = 'numeric';
     let container;
     
     const dispatch = createEventDispatcher();
@@ -40,10 +40,16 @@
         else    
             dispatch('close');
     }
+    function toggleType() {
+        if (type === 'numeric')
+            type = 'unit';
+        else
+            type = 'numeric';
+    }
 </script>
 <div bind:this={container} class='container' class:hidden={!visible} on:click on:transitionend={handleTransitionEnd}>
-    <div class='unit' data-type='popup' on:click={() => numeric = !numeric}>Choose unit ...</div>
-    {#if numeric}
+    <div class='unit' data-type='popup' on:click={toggleType}>Choose unit ...</div>
+    {#if type === 'numeric'}
         <NumericKeypad/>
     {:else}
         <UnitKeypad/>

@@ -66,6 +66,7 @@
 
 	function handleQtyClick(e) {
 		selectedItem = findItemById(e.currentTarget.parentNode.id);
+		keypad.type = 'numeric';
 		keypad.open();
 	}
 
@@ -96,6 +97,7 @@
 
 	const keypad = {
 		visible: false,
+		type: 'numeric',
 		open() {
 			if (!keypad.visible) 
 				keypad.visible = true;
@@ -115,6 +117,7 @@
 		if (type === 'unit') {
 			selectedItem.unit = key;
 			items = [...items];
+			keypad.type = 'numeric';
 			return;
 		}
 		if (['1/4', '1/2', '3/4'].includes(key)) {
@@ -206,6 +209,7 @@
 </div>
 <Keypad 
 	visible={keypad.visible} 
+	type={keypad.type}
 	on:click={handleKeypadClick} 
 	on:open={handleKeypadOpen}
 	on:change={handleUnitChange}
