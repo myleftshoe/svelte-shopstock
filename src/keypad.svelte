@@ -73,17 +73,20 @@
 </script>
 <div bind:this={container} class='container' class:hidden={!visible} on:click on:transitionend={handleTransitionEnd}>
     <div class='unit' data-type='popup' on:click={() => showPopup = !showPopup}>Choose unit ...
-    {#if showPopup}
-        <div class='popup' transition:slide>
-            <button class='unitbutton' data-type='unit'>bags</button>
-            <button class='unitbutton' data-type='unit'>black tubs</button>
-            <button class='unitbutton' data-type='unit'>boxes</button>
-            <button class='unitbutton' data-type='unit'>trays</button>
-            <button class='unitbutton' data-type='unit'>bin</button>
-            <button class='unitbutton' data-type='unit'>shelf</button>
-        </div>
-    {/if}
     </div>
+    {#if showPopup}
+        <div class='row' data-type='unit'>
+            <Key class='unitbutton' data-type='unit'>black tubs</Key>
+            <Key class='unitbutton' data-type='unit'>boxes</Key>
+        </div>
+        <div class='row' data-type='unit'>
+            <Key class='unitbutton' data-type='unit'>trays</Key>
+            <Key class='unitbutton' data-type='unit'>bin</Key>
+        </div>
+        <div class='row' data-type='unit'>
+            <Key class='unitbutton' data-type='unit'>shelf</Key>
+        </div>
+    {:else}
     <div class='row'>
         <Key>1</Key>
         <Key>2</Key>
@@ -108,4 +111,6 @@
         <Key>-</Key>
         <Key>X</Key>
     </div>
+    {/if}
+
 </div>

@@ -98,7 +98,7 @@
 
 	function handleKeypadClick(e) {
 		const key = e.target.innerText;
-		const type = e.target.dataset.type;
+		const type = e.target.parentElement.dataset.type;
 		if (type==='popup')
 			return;
 		if (type === 'unit') {
@@ -172,11 +172,17 @@
 
 	}
 </script>
+<svelte:head>
+  <script src="https://apis.google.com/js/platform.js" async defer></script>
+  <!-- see: https://dev.to/safaiyeh/svelte-google-sign-in-out-3n1n -->
+</svelte:head>
+
 <div id='container' class='container' class:autoscroll 
 	on:scroll={handleScroll} 
 	on:pointerdown={() => pointerDown = true}
 	on:pointerup={() => pointerDown = false}	
 >
+<div class="g-signin2" data-longtitle="true" data-onsuccess="onSignIn" />
 	{#each items as item, index}
 		<div id={item.id} data-name={item.name} 
 			class='row' 
