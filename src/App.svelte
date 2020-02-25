@@ -68,11 +68,11 @@
 
 	function handleQtyClick(e) {
 		selectedItem = findItemById(e.currentTarget.parentNode.id);
-		keypadVisible = true;
+		openKeypad();
 	}
 
 	function handleItemClick(e) {
-		keypadVisible=false;
+		closeKeypad();
 		const el = e.target;
 		console.log(selectedItem, el.id)
 		// keypadVisible = !keypadVisible;
@@ -94,6 +94,15 @@
 			keypadVisible = true;
 		else
 			handleKeypadOpen();
+	}
+
+	function openKeypad() {
+		if (!keypadVisible) 
+			keypadVisible = true;
+	}
+	function closeKeypad() {
+		if (keypadVisible) 
+			keypadVisible = false;
 	}
 
 	function handleKeypadClick(e) {
@@ -150,7 +159,7 @@
 	function handleScroll() {
 		if (!autoscroll && pointerDown) {
 			console.log('autoffsdds')
-			keypadVisible = false;
+			closeKeypad();
 		}
 	}
 
