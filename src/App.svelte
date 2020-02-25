@@ -49,7 +49,6 @@
 	export let name;
 	export let selectedItem = {};
 
-
 	import {afterUpdate} from 'svelte'
 	import * as animateScroll from "svelte-scrollto";
 	import shortid from 'shortid';
@@ -58,7 +57,6 @@
 	import EditItem from './edit-item.svelte';
 
 	let items = data.map(name => ({id:'A'+shortid.generate(),name, qty: '', unit:''}));
-	let keypadVisible = false;
 	let autoscroll = false;
 	let pointerDown = false;
 
@@ -68,14 +66,14 @@
 
 	function handleQtyClick(e) {
 		selectedItem = findItemById(e.currentTarget.parentNode.id);
-		openKeypad();
+		keypad.open();
 	}
 
 	function handleItemClick(e) {
-		closeKeypad();
+		keypad.close();
 		const el = e.target;
 		console.log(selectedItem, el.id)
-		// keypadVisible = !keypadVisible;
+		// keypad.visible = !keypad.visible;
 		if (selectedItem.id !== el.parentNode.id) {
 			el.readOnly = true;
 		}
@@ -90,19 +88,22 @@
 
 		return;
 		selectedItem = findItemById(e.currentTarget.id);
-		if (!keypadVisible) 
-			keypadVisible = true;
+		if (!keypad.visible) 
+			keypad.visible = true;
 		else
 			handleKeypadOpen();
 	}
 
-	function openKeypad() {
-		if (!keypadVisible) 
-			keypadVisible = true;
-	}
-	function closeKeypad() {
-		if (keypadVisible) 
-			keypadVisible = false;
+	const keypad = {
+		visible: false,
+		open() {
+			if (!keypad.visible) 
+				keypad.visible = true;
+		},
+		close() {
+			if (keypad.visible) 
+				keypad.visible = false;
+		}
 	}
 
 	function handleKeypadClick(e) {
@@ -159,7 +160,7 @@
 	function handleScroll() {
 		if (!autoscroll && pointerDown) {
 			console.log('autoffsdds')
-			closeKeypad();
+			keypad.close();
 		}
 	}
 
@@ -193,7 +194,7 @@
 			class:selected={selectedItem.id === item.id} 
 		>
 			<input type=text readonly class='item' value={item.name} on:click={handleItemClick}/>
-			<div class='quantity'  on:click={handleQtyClick} >
+			<div class='quantity' on:click={handleQtyClick} >
 				<div tabindex='0'>{item.qty}</div>
 				<!-- <input type=number tabindex='0' class='quantity' on:click={handleQtyClick} value={item.qty}/> -->
 				<div class='unit'>{item.unit}</div>
@@ -204,7 +205,7 @@
 	<div id='spacer'></div>
 </div>
 <Keypad 
-	visible={keypadVisible} 
+	visible={keypad.visible} 
 	on:click={handleKeypadClick} 
 	on:open={handleKeypadOpen}
 	on:change={handleUnitChange}
