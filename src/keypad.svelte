@@ -25,6 +25,12 @@
         color:white;
     }
 </style>
+<script context='module'>
+	export const KEYPAD_TYPE = {
+        NUMERIC: 'numeric',
+        UNIT: 'unit'
+	}
+</script>
 <script>
     export let visible = true;
     import NumericKeypad from './numeric-keypad.svelte';
@@ -41,10 +47,10 @@
             dispatch('close');
     }
     function toggleType() {
-        if (type === 'numeric')
-            type = 'unit';
+        if (type === KEYPAD_TYPE.NUMERIC)
+            type = KEYPAD_TYPE.UNIT;
         else
-            type = 'numeric';
+            type = KEYPAD_TYPE.NUMERIC;
     }
 </script>
 <div bind:this={container} class='container' class:hidden={!visible} on:click on:transitionend={handleTransitionEnd}>

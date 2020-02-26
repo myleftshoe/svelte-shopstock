@@ -53,7 +53,7 @@
 	import * as animateScroll from "svelte-scrollto";
 	import shortid from 'shortid';
 	import data from './items.js';
-	import Keypad from './keypad.svelte';
+	import Keypad, {KEYPAD_TYPE} from './keypad.svelte';
 	import EditItem from './edit-item.svelte';
 
 	let items = data.map(name => ({id:'A'+shortid.generate(),name, qty: '', unit:''}));
@@ -66,7 +66,7 @@
 
 	function handleQtyClick(e) {
 		selectedItem = findItemById(e.currentTarget.parentNode.id);
-		keypad.type = 'numeric';
+		keypad.type = KEYPAD_TYPE.NUMERIC;
 		keypad.open();
 	}
 
@@ -97,7 +97,7 @@
 
 	const keypad = {
 		visible: false,
-		type: 'numeric',
+		type: KEYPAD_TYPE.NUMERIC,
 		open() {
 			if (!keypad.visible) 
 				keypad.visible = true;
@@ -117,7 +117,7 @@
 		if (type === 'unit') {
 			selectedItem.unit = key;
 			items = [...items];
-			keypad.type = 'numeric';
+			keypad.type = KEYPAD_TYPE.NUMERIC;
 			return;
 		}
 		if (['1/4', '1/2', '3/4'].includes(key)) {
